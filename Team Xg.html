@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Team Xg | SAMP Hack & Dev</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0a0c14;
+            --surface: #131722;
+            --surface2: #1a1f30;
+            --primary: #00e676;
+            --primary-dark: #00c853;
+            --accent: #00b0ff;
+            --danger: #ff1744;
+            --text: #e8e8e8;
+            --text2: #a0a4b8;
+            --border: #252a3a;
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', 'Cairo', Tahoma, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(ellipse at 20% 20%, rgba(0,230,118,0.03) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(0,176,255,0.03) 0%, transparent 60%);
+        }
+
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+        .nav-tab {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text2);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.25s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .nav-tab:hover { color: #fff; background: var(--surface2); }
+        .nav-tab.active {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0,230,118,0.3);
+        }
+        .admin-badge {
+            background: var(--danger);
+            color: #fff;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: none;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        .section {
+            display: none;
+            animation: fadeSlide 0.4s ease;
+        }
+        .section.active { display: block; }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            color: #fff;
+        }
+        .section-title i { color: var(--primary); }
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.4rem;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #000;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 0 25px rgba(0,230,118,0.4);
+        }
+        .btn-danger {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+        .btn-danger:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-sm { padding: 0.4rem 1rem; font-size: 0.8rem; }
+
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            color: var(--text2);
+            font-size: 0.9rem;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0,230,118,0.15);
+        }
+        textarea.form-control { min-height: 110px; resize: vertical; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+        .gallery-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .gallery-card:hover { border-color: var(--primary); }
+        .gallery-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .gallery-card .card-body { padding: 1rem; }
+        .gallery-card .card-body h4 { font-size: 1rem; margin-bottom: 0.3rem; }
+        .gallery-card .card-body p { color: var(--text2); font-size: 0.85rem; }
+
+        .youtube-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        .yt-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .yt-card:hover { border-color: #ff0000; }
+        .yt-card .thumb-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            background: #000;
+        }
+        .yt-card .thumb-container img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .yt-card .yt-info { padding: 1rem; }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(6px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-box h3 { margin-bottom: 1.2rem; font-size: 1.4rem; }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(120px);
+            background: var(--surface2);
+            border: 1px solid var(--primary);
+            color: #fff;
+            padding: 0.9rem 2rem;
+            border-radius: 30px;
+            z-index: 999;
+            font-weight: 600;
+            transition: 0.4s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error { border-color: var(--danger); }
+
+        @media (max-width: 768px) {
+            .header { padding: 0.6rem 1rem; }
+            .logo { font-size: 1.3rem; }
+            .nav-tab { padding: 0.5rem 0.9rem; font-size: 0.78rem; }
+            .section-title { font-size: 1.4rem; }
+            .gallery-grid, .youtube-grid { grid-template-columns: 1fr; }
+            .grid-3 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">Team Xg</div>
+    <nav class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('home', this)"><i class="fa-solid fa-house"></i> الرئيسية</button>
+        <button class="nav-tab" onclick="switchTab('gallery', this)"><i class="fa-solid fa-images"></i> المعرض</button>
+        <button class="nav-tab" onclick="switchTab('join', this)"><i class="fa-solid fa-user-plus"></i> انضم</button>
+        <button class="nav-tab" onclick="switchTab('youtube', this)"><i class="fa-brands fa-youtube"></i> يوتيوب</button>
+        <button class="nav-tab" onclick="switchTab('owner', this)"><i class="fa-solid fa-crown"></i> المالك</button>
+    </nav>
+    <span class="admin-badge" id="adminBadge"><i class="fa-solid fa-shield-halved"></i> OwnerXg</span>
+</header>
+
+<main class="container">
+
+    <!-- الرئيسية -->
+    <section id="tab-home" class="section active">
+        <h2 class="section-title"><i class="fa-solid fa-terminal"></i> فريق Xg - هاكات و تطوير SA-MP</h2>
+        <div class="grid-3" style="margin-bottom:2rem;">
+            <div class="card">
+                <i class="fa-solid fa-code" style="font-size:2rem;color:var(--primary);margin-bottom:0.8rem;"></i>
+                <h3>تطوير الهكات</h3>
+                <p style="color:var(--text2);">هاكات احترافية لـ SA-MP بأمان عالي وتحديثات مستمرة.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-puzzle-piece" style="font-size:2rem;color:var(--accent);margin-bottom:0.8rem;"></i>
+                <h3>مودات مخصصة</h3>
+                <p style="color:var(--text2);">مودات فريدة حسب طلب السيرفرات بمميزات حصرية.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-shield-halved" style="font-size:2rem;color:var(--danger);margin-bottom:0.8rem;"></i>
+                <h3>حماية وأمان</h3>
+                <p style="color:var(--text2);">أنظمة حماية متطورة ضد الغش والاختراق.</p>
+            </div>
+        </div>
+        <h3 style="margin-bottom:1rem;">آخر الصور</h3>
+        <div class="gallery-grid" id="home-gallery"></div>
+    </section>
+
+    <!-- المعرض -->
+    <section id="tab-gallery" class="section">
+        <h2 class="section-title"><i class="fa-solid fa-images"></i> معرض الصور</h2>
+        <div style="margin-bottom:1.5rem;display:none;" id="gallery-actions">
+            <button class="btn btn-primary" onclick="openModal('modal-upload')"><i class="fa-solid fa-cloud-upload-alt"></i> رفع صورة</button>
+        </div>
+        <div class="gallery-grid" id="gallery-container"></div>
+    </section>
+
+    <!-- طلب الانضمام -->
+    <section id="tab-join" class="section">
+        <h2 class="section-title"><i class="fa-solid fa-user-plus"></i> طلب انضمام للفريق</h2>
+        <div class="card" style="max-width:650px;">
+            <form id="join-form" onsubmit="submitJoin(event)">
+                <div class="form-group">
+                    <label>الاسم الكامل (Name)</label>
+                    <input type="text" class="form-control" id="join-name" required placeholder="أدخل اسمك الكامل">
+                </div>
+                <div class="form-group">
+                    <label>العمر (Age)</label>
+                    <input type="number" class="form-control" id="join-age" required min="10" max="99" placeholder="أدخل عمرك">
+                </div>
+                <div class="form-group">
+                    <label>اسم المنطق (Name Logic)</label>
+                    <input type="text" class="form-control" id="join-logic" required placeholder="اسمك داخل اللعبة">
+                </div>
+                <div class="form-group">
+                    <label>وصف طلبك وما تريد تقديمه</label>
+                    <textarea class="form-control" id="join-desc" required placeholder="اكتب وصفاً تفصيلياً لطلبك..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>لماذا تريد الانضمام إلينا؟</label>
+                    <textarea class="form-control" id="join-reason" required placeholder="اشرح أسباب رغبتك في الانضمام..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> إرسال الطلب</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- اليوتيوب -->
+    <section id="tab-youtube" class="section">
+        <h2 class="section-title"><i class="fa-brands fa-youtube"></i> أحدث الفيديوهات</h2>
+        <div style="margin-bottom:1.5rem;display:none;" id="youtube-actions">
+            <button class="btn btn-primary" onclick="openModal('modal-youtube')"><i class="fa-solid fa-plus"></i> إضافة فيديو</button>
+        </div>
+        <div class="youtube-grid" id="youtube-container"></div>
+    </section>
+
+    <!-- لوحة المالك -->
+    <section id="tab-owner" class="section">
+        <h2 class="section-title"><i class="fa-solid fa-crown"></i> لوحة تحكم المالك</h2>
+        <div id="owner-login">
+            <div class="card" style="max-width:420px;margin:0 auto;">
+                <h3 style="text-align:center;margin-bottom:1.5rem;"><i class="fa-solid fa-lock"></i> تسجيل الدخول</h3>
+                <form onsubmit="adminLogin(event)">
+                    <div class="form-group">
+                        <label>اسم المستخدم</label>
+                        <input type="text" class="form-control" id="login-user" required placeholder="OwnerXg">
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" class="form-control" id="login-pass" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width:100%;"><i class="fa-solid fa-key"></i> دخول</button>
+                </form>
+            </div>
+        </div>
+        <div id="owner-panel" style="display:none;">
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+                <button class="btn btn-outline" onclick="loadJoins()"><i class="fa-solid fa-list"></i> عرض طلبات الانضمام</button>
+                <button class="btn btn-danger" onclick="adminLogout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل خروج</button>
+            </div>
+            <div id="joins-container" class="grid-3"></div>
+        </div>
+    </section>
+
+</main>
+
+<!-- مودال رفع صورة -->
+<div class="modal-overlay" id="modal-upload">
+    <div class="modal-box">
+        <h3><i class="fa-solid fa-cloud-upload-alt"></i> رفع صورة جديدة</h3>
+        <form onsubmit="uploadImage(event)">
+            <div class="form-group">
+                <label>اختر الصورة</label>
+                <input type="file" class="form-control" id="file-input" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>عنوان الصورة</label>
+                <input type="text" class="form-control" id="upload-title" required placeholder="عنوان الصورة">
+            </div>
+            <div class="form-group">
+                <label>الوصف</label>
+                <textarea class="form-control" id="upload-desc" placeholder="وصف مختصر (اختياري)"></textarea>
+            </div>
+            <div style="display:flex;gap:0.8rem;justify-content:flex-end;">
+                <button type="button" class="btn btn-outline" onclick="closeModal('modal-upload')">إلغاء</button>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-upload"></i> رفع</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- مودال إضافة يوتيوب -->
+<div class="modal-overlay" id="modal-youtube">
+    <div class="modal-box">
+        <h3><i class="fa-brands fa-youtube"></i> إضافة فيديو يوتيوب</h3>
+        <form onsubmit="addYoutube(event)">
+            <div class="form-group">
+                <label>رابط الفيديو</label>
+                <input type="url" class="form-control" id="yt-url" required placeholder="https://youtube.com/watch?v=...">
+            </div>
+            <div class="form-group">
+                <label>عنوان الفيديو</label>
+                <input type="text" class="form-control" id="yt-title" required placeholder="عنوان الفيديو">
+            </div>
+            <div class="form-group">
+                <label>الوصف</label>
+                <textarea class="form-control" id="yt-desc" placeholder="وصف مختصر (اختياري)"></textarea>
+            </div>
+            <div style="display:flex;gap:0.8rem;justify-content:flex-end;">
+                <button type="button" class="btn btn-outline" onclick="closeModal('modal-youtube')">إلغاء</button>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> إضافة</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================== إعدادات JSONBin ====================
+var JSONBIN_MASTER_KEY = '$2a$10$wkaiIPUazU0DGTZ8yx2O7uF3p6ybq8s14cGAi2DklHXDHw79lY7hG';
+var JSONBIN_ACCESS_KEY = '$2a$10$XZX7Ht5.hX32bpZLnCVCIOPoGtijz3q0DsxNnRQ3.g2WIYxkuBTte';
+var JSONBIN_BIN_ID = 'TeamXg';
+var JSONBIN_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
+
+// ==================== بيانات الدخول ====================
+var OWNER_USER = 'OwnerXg';
+var OWNER_PASS = 'XgOnTop';
+
+// البيانات
+var appData = { images: [], videos: [], joins: [] };
+var isAdmin = false;
+
+// ==================== تحميل وحفظ البيانات ====================
+async function loadData() {
+    try {
+        var resp = await fetch(JSONBIN_URL, {
+            headers: {
+                'X-Master-Key': JSONBIN_MASTER_KEY,
+                'X-Access-Key': JSONBIN_ACCESS_KEY
+            }
+        });
+        if (resp.ok) {
+            var result = await resp.json();
+            appData = result.record;
+        }
+    } catch (e) {
+        console.log('استخدام البيانات الافتراضية');
+    }
+}
+
+async function saveData() {
+    try {
+        await fetch(JSONBIN_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': JSONBIN_MASTER_KEY,
+                'X-Access-Key': JSONBIN_ACCESS_KEY
+            },
+            body: JSON.stringify(appData)
+        });
+    } catch (e) {
+        console.error('فشل الحفظ:', e);
+    }
+}
+
+// ==================== التنقل ====================
+function switchTab(tab, btn) {
+    document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+    document.querySelectorAll('.nav-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById('tab-' + tab).classList.add('active');
+    if (btn) btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (tab === 'gallery') renderGallery();
+    if (tab === 'youtube') renderYoutube();
+    if (tab === 'home') renderHomeGallery();
+}
+
+// ==================== إشعارات ====================
+function toast(msg, err) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (err ? ' error' : '') + ' show';
+    setTimeout(function() { t.classList.remove('show'); }, 3500);
+}
+
+// ==================== مودال ====================
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal-overlay').forEach(function(o) {
+    o.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); });
+});
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.show').forEach(function(m) { m.classList.remove('show'); }); });
+
+// ==================== تحديث واجهة المالك ====================
+function updateAdminUI() {
+    document.getElementById('adminBadge').style.display = isAdmin ? 'flex' : 'none';
+    document.getElementById('gallery-actions').style.display = isAdmin ? 'block' : 'none';
+    document.getElementById('youtube-actions').style.display = isAdmin ? 'block' : 'none';
+    document.getElementById('owner-login').style.display = isAdmin ? 'none' : 'block';
+    document.getElementById('owner-panel').style.display = isAdmin ? 'block' : 'none';
+}
+
+// ==================== المعرض ====================
+function renderGallery() {
+    var c = document.getElementById('gallery-container');
+    if (appData.images.length === 0) {
+        c.innerHTML = '<p style="color:var(--text2);">لا توجد صور بعد.</p>';
+        return;
+    }
+    c.innerHTML = appData.images.map(function(img, i) {
+        return '<div class="gallery-card">' +
+            '<img src="' + img.data + '" alt="' + esc(img.title) + '" loading="lazy">' +
+            '<div class="card-body">' +
+            '<h4>' + esc(img.title) + '</h4>' +
+            '<p>' + esc(img.desc || '') + '</p>' +
+            (isAdmin ? '<button class="btn btn-danger btn-sm" onclick="deleteImage(' + i + ')" style="margin-top:0.5rem;"><i class="fa-solid fa-trash"></i> حذف</button>' : '') +
+            '</div></div>';
+    }).join('');
+}
+
+function renderHomeGallery() {
+    var c = document.getElementById('home-gallery');
+    var latest = appData.images.slice(-4).reverse();
+    if (latest.length === 0) {
+        c.innerHTML = '<p style="color:var(--text2);">لا توجد صور بعد.</p>';
+        return;
+    }
+    c.innerHTML = latest.map(function(img) {
+        return '<div class="gallery-card">' +
+            '<img src="' + img.data + '" alt="' + esc(img.title) + '" loading="lazy">' +
+            '<div class="card-body"><h4>' + esc(img.title) + '</h4><p>' + esc(img.desc || '') + '</p></div>' +
+            '</div>';
+    }).join('');
+}
+
+async function uploadImage(e) {
+    e.preventDefault();
+    var fileInput = document.getElementById('file-input');
+    var title = document.getElementById('upload-title').value.trim();
+    var desc = document.getElementById('upload-desc').value.trim();
+    if (!fileInput.files[0] || !title) { toast('العنوان والصورة مطلوبان', true); return; }
+    var reader = new FileReader();
+    reader.onload = async function(ev) {
+        appData.images.push({ title: title, desc: desc, data: ev.target.result });
+        await saveData();
+        toast('تم رفع الصورة بنجاح');
+        closeModal('modal-upload');
+        document.getElementById('upload-title').value = '';
+        document.getElementById('upload-desc').value = '';
+        fileInput.value = '';
+        renderGallery();
+        renderHomeGallery();
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+}
+
+async function deleteImage(i) {
+    if (!confirm('حذف هذه الصورة؟')) return;
+    appData.images.splice(i, 1);
+    await saveData();
+    toast('تم الحذف');
+    renderGallery();
+    renderHomeGallery();
+}
+
+// ==================== يوتيوب ====================
+function getYoutubeId(url) {
+    var m = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    return m ? m[1] : null;
+}
+
+function renderYoutube() {
+    var c = document.getElementById('youtube-container');
+    if (appData.videos.length === 0) {
+        c.innerHTML = '<p style="color:var(--text2);">لا توجد فيديوهات بعد.</p>';
+        return;
+    }
+    c.innerHTML = appData.videos.map(function(v, i) {
+        return '<div class="yt-card">' +
+            '<div class="thumb-container"><img src="https://img.youtube.com/vi/' + v.videoId + '/mqdefault.jpg" alt="' + esc(v.title) + '" loading="lazy"></div>' +
+            '<div class="yt-info">' +
+            '<h4>' + esc(v.title) + '</h4>' +
+            '<p style="color:var(--text2);">' + esc(v.desc || '') + '</p>' +
+            '<a href="https://youtube.com/watch?v=' + v.videoId + '" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;"><i class="fa-solid fa-play"></i> مشاهدة</a>' +
+            (isAdmin ? '<button class="btn btn-danger btn-sm" onclick="deleteYoutube(' + i + ')" style="margin-right:0.5rem;"><i class="fa-solid fa-trash"></i></button>' : '') +
+            '</div></div>';
+    }).join('');
+}
+
+async function addYoutube(e) {
+    e.preventDefault();
+    var url = document.getElementById('yt-url').value.trim();
+    var title = document.getElementById('yt-title').value.trim();
+    var desc = document.getElementById('yt-desc').value.trim();
+    var vid = getYoutubeId(url);
+    if (!vid) { toast('رابط يوتيوب غير صالح', true); return; }
+    if (!title) { toast('العنوان مطلوب', true); return; }
+    appData.videos.push({ videoId: vid, title: title, desc: desc });
+    await saveData();
+    toast('تمت الإضافة');
+    closeModal('modal-youtube');
+    document.getElementById('yt-url').value = '';
+    document.getElementById('yt-title').value = '';
+    document.getElementById('yt-desc').value = '';
+    renderYoutube();
+}
+
+async function deleteYoutube(i) {
+    if (!confirm('حذف هذا الفيديو؟')) return;
+    appData.videos.splice(i, 1);
+    await saveData();
+    toast('تم الحذف');
+    renderYoutube();
+}
+
+// ==================== طلب الانضمام ====================
+async function submitJoin(e) {
+    e.preventDefault();
+    var join = {
+        name: document.getElementById('join-name').value.trim(),
+        age: document.getElementById('join-age').value,
+        logic: document.getElementById('join-logic').value.trim(),
+        desc: document.getElementById('join-desc').value.trim(),
+        reason: document.getElementById('join-reason').value.trim(),
+        date: new Date().toISOString()
+    };
+    if (!join.name || !join.age || !join.logic || !join.desc || !join.reason) {
+        toast('جميع الحقول مطلوبة', true);
+        return;
+    }
+    appData.joins.push(join);
+    await saveData();
+    toast('تم إرسال طلبك بنجاح!');
+    document.getElementById('join-form').reset();
+}
+
+// ==================== المالك ====================
+async function adminLogin(e) {
+    e.preventDefault();
+    var user = document.getElementById('login-user').value.trim();
+    var pass = document.getElementById('login-pass').value.trim();
+    
+    if (user === OWNER_USER && pass === OWNER_PASS) {
+        isAdmin = true;
+        sessionStorage.setItem('teamxg_admin', 'true');
+        updateAdminUI();
+        toast('مرحباً OwnerXg!');
+        document.getElementById('login-user').value = '';
+        document.getElementById('login-pass').value = '';
+    } else {
+        toast('بيانات الدخول غير صحيحة', true);
+    }
+}
+
+function adminLogout() {
+    isAdmin = false;
+    sessionStorage.removeItem('teamxg_admin');
+    updateAdminUI();
+    toast('تم تسجيل الخروج');
+    document.getElementById('joins-container').innerHTML = '';
+}
+
+function loadJoins() {
+    var c = document.getElementById('joins-container');
+    if (appData.joins.length === 0) {
+        c.innerHTML = '<p style="color:var(--text2);">لا توجد طلبات.</p>';
+        return;
+    }
+    c.innerHTML = appData.joins.map(function(j, i) {
+        return '<div class="card">' +
+            '<h4>' + esc(j.name) + '</h4>' +
+            '<p style="color:var(--text2);">العمر: ' + j.age + ' | المنطق: ' + esc(j.logic) + '</p>' +
+            '<p style="color:var(--text2);">الطلب: ' + esc(j.desc) + '</p>' +
+            '<p style="color:var(--text2);">السبب: ' + esc(j.reason) + '</p>' +
+            '<p style="color:var(--text2);font-size:0.8rem;">' + new Date(j.date).toLocaleString('ar-SA') + '</p>' +
+            '<button class="btn btn-danger btn-sm" onclick="deleteJoin(' + i + ')"><i class="fa-solid fa-trash"></i> حذف</button>' +
+            '</div>';
+    }).join('');
+}
+
+async function deleteJoin(i) {
+    if (!confirm('حذف هذا الطلب؟')) return;
+    appData.joins.splice(i, 1);
+    await saveData();
+    toast('تم الحذف');
+    loadJoins();
+}
+
+function esc(t) {
+    var d = document.createElement('div');
+    d.textContent = t || '';
+    return d.innerHTML;
+}
+
+// ==================== بدء التشغيل ====================
+async function init() {
+    if (sessionStorage.getItem('teamxg_admin') === 'true') {
+        isAdmin = true;
+    }
+    await loadData();
+    updateAdminUI();
+    renderGallery();
+    renderYoutube();
+    renderHomeGallery();
+}
+
+init();
+</script>
+</body>
+</html>
